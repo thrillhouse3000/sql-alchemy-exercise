@@ -26,14 +26,16 @@ class UserModelTests(TestCase):
 
 class FlaskTests(TestCase):
     def setUp(self):
-        User.query.delete()
 
         user = User(first_name='Testy', last_name="Testerson")
         db.session.add(user)
         db.session.commit()
     
     def tearDown(self):
+        
         db.session.rollback()
+        db.drop_all()
+        db.create_all()
     
     def test_users(self):
         with app.test_client() as client:
