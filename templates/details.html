@@ -9,6 +9,15 @@
         <img src={{user.img_url}} alt="">
     </div>
     <div>
+        <a href="/users/{{user.id}}/posts/new">Add a Post</a>
+        <h2>Posts</h2>
+        <ul>
+            {% for post in posts%}
+                <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
         <a href="/users/{{user.id}}/edit">Edit User</a>
     </div>
     <div>
@@ -17,6 +26,6 @@
         </form>
     </div>
     <div>
-        <a href="/">Back to Users</a>
+        <a href="/users">Back to Users</a>
     </div>
 {% endblock %}

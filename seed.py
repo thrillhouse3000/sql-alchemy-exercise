@@ -1,18 +1,20 @@
-from models import User, db
+from models import User, Post, db
 from app import app
 
 db.drop_all()
 db.create_all()
 
 User.query.delete()
+Post.query.delete()
 
-wilford = User(first_name='Wilford', last_name='Brimley', img_url='https://www.emmys.com/sites/default/files/bios/wilford-brimley-450x600.jpg')
 
-richard =  User(first_name='Richard', last_name='Simmons', img_url='https://assets.vogue.com/photos/58b732ae61606a75f4401afa/master/pass/00-square-richard-simmons-news.jpg')
+mrt =  User(first_name='Mr.', last_name='T', img_url='https://cdn.mos.cms.futurecdn.net/mFDumCYxaHBY8FdmyQxn4i-1024-80.jpg.webp')
 
 bob = User(first_name='Bob', last_name='Ross', img_url='https://www.bobross.com/content/bob_ross_img.png')
 
-db.session.add(wilford)
-db.session.add(richard)
-db.session.add(bob)
+post1 = Post(title='I pity the fool!', content="That doesn't respect his mother", user_id=1)
+
+post2 = Post(title='Happy little tree', content='There are no mistakes, just happy accidents', user_id=2)
+
+db.session.add_all([mrt, bob, post1, post2])
 db.session.commit()

@@ -1,0 +1,12 @@
+body {
+	text-align: center;
+}
+
+ul {
+	list-style-type: none;
+}
+
+.success {
+	background-color: lightgreen;
+	font-size: 1.3rem;
+}
