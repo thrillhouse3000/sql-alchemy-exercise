@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit User Form{% endblock %}
+
+{% block header %}<h1>Edit {{user.first_name}} {{user.last_name}} Details</h1>{% endblock %}
+
+{% block content %}
+<div class="card mx-auto p-3" style="width: 20rem;">
+    <form action="/users/{{user.id}}/edit" method="POST">
+        <div>
+            <label class='form-label' for="first_name">First Name:</label>
+            <input class='form-control' type="text" name="first_name" value="{{user.first_name}}">
+        </div>
+        <div>
+            <label class='form-label' for="last_name">Last Name:</label>
+            <input class='form-control' type="text" name="last_name" value="{{user.last_name}}">
+        </div>
+        <div>
+            <label class='form-label' for="img_url">Img URL:</label>
+            <input class='form-control' type="url" name="img_url" value="{{user.img_url}}">
+        </div>
+        <button class="btn btn-success">Submit Changes</button>
+    </form>
+    <a class='btn btn-primary' href="/users/{{user.id}}">Back to Details</a>
+    <a class='btn btn-primary' href="/users">Back to Users</a>
+</div>
+{% endblock %}

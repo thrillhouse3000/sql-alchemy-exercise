@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Tags{% endblock %}
+
+{% block header %}<h1>Tags List</h1>{% endblock %}
+
+{% block content %}
+<div class="card mx-auto p-3" style="width: 20rem;">
+    <div class="list-group">
+        {% for tag in tags %}
+        <a class='list-group-item border-0' href="/tags/{{tag.id}}">{{tag.name}}</a>
+        {% endfor %}
+    </div>
+
+    <a class="btn btn-success" href="/tags/new">Add a New Tag</a>
+    <a class='btn btn-primary' href="/">Back to Home</a>
+</div>       
+{% endblock %}

@@ -5,12 +5,14 @@
 {% block header %}<h1>Users List</h1>{% endblock %}
 
 {% block content %}
-    <ul>
+<div class="card mx-auto p-3" style="width: 20rem;">
+    <div class="list-group">
         {% for user in users %}
-        <li><a href="/users/{{user.id}}">{{user.fullname}}</a></li>
+        <a class='list-group-item border-0' href="/users/{{user.id}}">{{user.fullname}}</a>
         {% endfor %}
-    </ul>
+    </div>
 
-    <a href="/users/new">Add a New User</a>
-    <a href="/">Back to Home</a>
+    <a class="btn btn-success" href="/users/new">Add a New User</a>
+    <a class='btn btn-primary' href="/">Back to Home</a>
+</div>
 {% endblock %}

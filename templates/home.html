@@ -5,13 +5,22 @@
 {% block header %}<h1>Recent Posts</h1>{% endblock %}
 
 {% block content %}
-    <ul>
+    <div>
         {% for post in posts %}
-            <h3>{{post.title}}</h3>
-            <p>{{post.content}}</p>
-            <p>By {{post.users.fullname}} on {{post.date}}</p>
+            <div class="card mx-auto p-3" style="width: 20rem;">
+                <h5 class="card-title">{{post.title}}</h5>
+                <p class="card-text">{{post.content}}</p>
+                <footer class="blockquote-footer">By <b>{{post.users.fullname}}</b> on {{post.date}}</footer>
+                <div>
+                    {% for tag in post.tag %}
+                        <a class="badge rounded-pill bg-secondary text-decoration-none" href="/tags/{{tag.id}}">{{tag.name}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+           
         {% endfor %}
-    </ul>
+    </div>
 
-    <a href="/users">Users Page</a>
+    <a class='btn btn-primary' href="/users">Users Page</a>
+    <a class='btn btn-secondary' href="/tags">Tags Page</a>
 {% endblock %}

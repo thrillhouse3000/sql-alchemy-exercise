@@ -1,6 +1,6 @@
 from unittest import TestCase
 from app import app
-from models import Post, User, db
+from models import Post, User, Tag, PostTag, db
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
 app.config['SQLALCHEMY_ECHO'] = False
@@ -42,6 +42,36 @@ class PostModelTests(TestCase):
         test_post = Post.query.get(1)
         self.assertEqual(post, test_post)
 
+class TagModelTests(TestCase):
+    def setUp(self):
+        Post.query.delete()
+    
+    def tearDown(self):
+        db.session.rollback()
+    
+    def test_db_submit(self):
+        tag = Tag(name='Test')
+        db.session.add(tag)
+        db.session.commit()
+
+        test_tag = Tag.query.get(1)
+        self.assertEqual(tag, test_tag)
+
+class PostTagModelTests(TestCase):
+    def setUp(self):
+        Post.query.delete()
+    
+    def tearDown(self):
+        db.session.rollback()
+    
+    def test_append(self):
+        post = Post(title='TestPost', content="Testing")
+        tag = Tag(name='TestTag')
+        post.categories.append(PostTag(post_id=1, tag_id=1))
+        db.session.add_all([tag, post])
+        db.session.commit()
+        self.assertEqual(post.tag[0].name, 'TestTag')
+
 class UserRouteTests(TestCase):
     def setUp(self):
 
@@ -75,7 +105,7 @@ class UserRouteTests(TestCase):
             res = client.post('/users/new', data=d, follow_redirects=True)
             html = res.get_data(as_text=True)
             self.assertEqual(res.status_code, 200)
-            self.assertIn('<li><a href="/users/3">Testy2 Testerson2</a></li>', html)
+            self.assertIn('Testerson2', html)
     
     def test_edit_user(self):
         with app.test_client() as client:
@@ -83,7 +113,7 @@ class UserRouteTests(TestCase):
             res = client.post('/users/1/edit', data=d, follow_redirects=True)
             html = res.get_data(as_text=True)
             self.assertEqual(res.status_code, 200)
-            self.assertIn('<li><a href="/users/1">Testamus Testersonton</a></li>', html)
+            self.assertIn('Testersonton', html)
     
     def test_delete_user(self):
         with app.test_client() as client:
@@ -118,7 +148,7 @@ class PostRouteTests(TestCase):
             res = client.post('/users/1/posts/new', data=d, follow_redirects=True)
             html = res.get_data(as_text=True)
             self.assertEqual(res.status_code, 200)
-            self.assertIn('<a href="/posts/3">Test2</a>', html)
+            self.assertIn('Test2', html)
     
     def test_edit_post(self):
         with app.test_client() as client:
@@ -126,11 +156,55 @@ class PostRouteTests(TestCase):
             res = client.post('/posts/1/edit', data=d, follow_redirects=True)
             html = res.get_data(as_text=True)
             self.assertEqual(res.status_code, 200)
-            self.assertIn('<h1>Test2</h1>', html)
+            self.assertIn('Test2', html)
 
     def test_delete_post(self):
         with app.test_client() as client:
             res = client.post('/posts/1/delete', follow_redirects=True)
             html = res.get_data(as_text=True)
             self.assertEqual(res.status_code, 200)
-            self.assertNotIn('<a href="/posts/1">Test</a>', html)
+            self.assertNotIn('Testing', html)
+
+class TagRouteTests(TestCase):
+    def setUp(self):
+        tag = Tag(name="TestTag")
+        db.session.add(tag)
+        db.session.commit()
+    
+    def tearDown(self):
+        
+        db.session.rollback()
+        db.drop_all()
+        db.create_all()
+    
+    def test_show_tag(self):
+        with app.test_client() as client:
+            res = client.get('/tags/1')
+            html = res.get_data(as_text=True)
+            self.assertEqual(res.status_code, 200)
+            self.assertIn('TestTag', html)
+    
+    def test_add_tag(self):
+        with app.test_client() as client:
+            d = {"name":"TestTag2"}
+            res = client.post('/tags/new', data=d, follow_redirects=True)
+            html = res.get_data(as_text=True)
+            self.assertEqual(res.status_code, 200)
+            self.assertIn('TestTag2', html)
+    
+    def test_edit_tag(self):
+        with app.test_client() as client:
+            d = {"name":"TestTag2Updated"}
+            res = client.post('/tags/1/edit', data=d, follow_redirects=True)
+            html = res.get_data(as_text=True)
+            self.assertEqual(res.status_code, 200)
+            self.assertIn('TestTag2Updated', html)
+    
+    def test_delete_tag(self):
+        with app.test_client() as client:
+            res = client.post('/tags/1/delete', follow_redirects=True)
+            html = res.get_data(as_text=True)
+            self.assertEqual(res.status_code, 200)
+            self.assertNotIn('TestTag', html)
+
+

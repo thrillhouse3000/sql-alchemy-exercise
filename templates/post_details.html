@@ -5,15 +5,23 @@
 {% block header %}<h1>{{post.title}}</h1>{% endblock %}
 
 {% block content %}
-    <p>{{post.content}}</p>
-    <p>By {{post.users.fullname}}</p>
-    <div>
-        <a href="/users/{{post.user_id}}">Back to User Details</a>
-    </div>
-    <div>
-        <a href="/posts/{{post.id}}/edit">Edit Post</a>
-        <form action="/posts/{{post.id}}/delete", method="POST">
-            <button>Delete Post</button>
-        </form>
+    <div class="card mx-auto p-3" style="width: 20rem;">
+        <div class="card-body">
+            <p class="card-text">{{post.content}}</p>
+            <footer class="blockquote-footer">By {{post.users.fullname}}</footer>
+            {% for tag in post.tag %}
+                <a class="badge rounded-pill bg-secondary text-decoration-none" href="/tags/{{tag.id}}">{{tag.name}}</a>
+            {% endfor %}
+        </div>
+        <div>
+            <a class="btn btn-warning d-inline" href="/posts/{{post.id}}/edit">Edit Post</a>
+            <form class='d-inline' action="/posts/{{post.id}}/delete", method="POST">
+                <button class="btn btn-danger">Delete Post</button>
+            </form>
+        </div>
+        <div>
+            <a class='btn btn-primary'href="/users/{{post.user_id}}">Back to User Details</a>
+        </div>
+        
     </div>
 {% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Tag {{tag.name}}{% endblock %}
+
+{% block header %}<h1>{{tag.name}}</h1>{% endblock %}
+
+{% block content %}
+<div class="card mx-auto p-3" style="width: 20rem;">
+    <h3>Posts like this:</h3>
+    <div class="list-group">
+        {% for post in tag.categories %}
+            <a class='list-group-item border-0' href="/posts/{{post.id}}">{{post.title}}</a>
+        {% endfor %}
+    </div>
+    <div>
+        <a class='btn btn-warning' href="/tags/{{tag.id}}/edit">Edit Tag</a>
+        <form class='d-inline' action="/tags/{{tag.id}}/delete", method="POST">
+            <button class="btn btn-danger">Delete Tag</button>
+        </form>
+    </div>
+    <div>
+        <a class='btn btn-primary' href="/tags">Back to Tags</a>
+    </div>
+</div>
+{% endblock %}
